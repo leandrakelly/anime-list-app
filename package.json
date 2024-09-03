@@ -5,9 +5,10 @@
     "packages/*"
   ],
   "scripts": {
-    "start:backend": "yarn workspace backend start",
+    "start:backend": "yarn workspace backend dev",
     "start:frontend": "yarn workspace frontend dev",
-    "start": "concurrently \"yarn start:backend\" \"yarn start:frontend\""
+    "start": "concurrently \"yarn start:backend\" \"yarn start:frontend\"",
+    "build": "yarn workspaces run build"
   },
   "devDependencies": {
     "concurrently": "^8.0.1"

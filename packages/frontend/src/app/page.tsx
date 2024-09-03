@@ -1,11 +1,14 @@
-import { Box, Heading, Text, Button } from '@chakra-ui/react'
+import { redirect } from 'next/navigation'
 
-export default function Home() {
-  return (
-    <Box p={8}>
-      <Heading mb={4}>Welcome to your Anime App</Heading>
-      <Text mb={4}>This is a sample page using Chakra UI components.</Text>
-      <Button colorScheme="pink">Get Started</Button>
-    </Box>
-  )
+import { getToken } from './actions/auth'
+import { AuthForms } from './components/AuthForms'
+
+export default async function Home() {
+  const token = await getToken()
+
+  if (token) {
+    redirect('/anime')
+  }
+
+  return <AuthForms />
 }
