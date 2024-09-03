@@ -1,6 +1,7 @@
 {
   "name": "anime-app-monorepo",
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
