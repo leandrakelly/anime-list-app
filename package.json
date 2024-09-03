@@ -1,14 +1,15 @@
 {
   "name": "anime-app-monorepo",
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "start:backend": "yarn workspace backend dev",
-    "start:frontend": "yarn workspace frontend dev",
-    "start": "concurrently \"yarn start:backend\" \"yarn start:frontend\"",
-    "build": "yarn workspaces run build"
+    "build": "yarn workspaces run build",
+    "start": "concurrently \"yarn workspace backend start\" \"yarn workspace frontend start\"",
+    "dev": "concurrently \"yarn workspace backend dev\" \"yarn workspace frontend dev\"",
+    "postinstall": "prisma generate"
   },
   "devDependencies": {
     "concurrently": "^8.0.1"
