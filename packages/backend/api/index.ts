@@ -3,18 +3,25 @@ import { jwt, sign } from "hono/jwt";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
 import { JWTPayload } from "hono/utils/jwt/types";
 import { serve } from "@hono/node-server";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
-import NodeCache from "node-cache";
-import pThrottle from "p-throttle";
+import { handle } from "hono/vercel";
+const bcrypt = await import("bcrypt");
+const NodeCache = (await import("node-cache")).default;
+const pThrottle = (await import("p-throttle")).default;
 
 const app = new Hono().basePath("/api");
 
 app.use("*", logger());
-app.use("*", cors());
+app.use(
+  "*",
+  cors({
+    origin: "*",
+    allowMethods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
 const prisma = new PrismaClient();
 
@@ -196,6 +203,8 @@ app.onError((err, c) => {
 const jwtMiddleware = jwt({
   secret: process.env.JWT_SECRET || "your-secret-key",
 });
+
+app.get("/", (c) => c.text("Hello World"));
 
 app.post("/auth/register", zValidator("json", userSchema), async (c) => {
   const { email, password, name } = c.req.valid("json");
@@ -448,13 +457,6 @@ app.delete("/watchlist/:id", zValidator("param", animeIdSchema), async (c) => {
   });
 });
 
-const port = process.env.PORT ? parseInt(process.env.PORT) : 3001;
-
-console.log(`Server is running on port ${port}`);
-
-serve({
+export default {
   fetch: app.fetch,
-  port,
-});
-
-export default app;
+};
