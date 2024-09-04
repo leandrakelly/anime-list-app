@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch api/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "deploy": "vercel --prod",
+    "deploy": "vercel",
     "postinstall": "prisma generate"
   },
   "dependencies": {

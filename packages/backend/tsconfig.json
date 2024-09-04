@@ -7,7 +7,7 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDir": "./api",
     "baseUrl": "."
   },
   "include": ["api/**/*"],

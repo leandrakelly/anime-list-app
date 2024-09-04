@@ -3,14 +3,14 @@ import { jwt, sign } from "hono/jwt";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 import { JWTPayload } from "hono/utils/jwt/types";
 import { serve } from "@hono/node-server";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
+import NodeCache from "node-cache";
+import pThrottle from "p-throttle";
 import { handle } from "hono/vercel";
-const bcrypt = await import("bcrypt");
-const NodeCache = (await import("node-cache")).default;
-const pThrottle = (await import("p-throttle")).default;
 
 const app = new Hono().basePath("/api");
 
@@ -457,6 +457,13 @@ app.delete("/watchlist/:id", zValidator("param", animeIdSchema), async (c) => {
   });
 });
 
-export default {
-  fetch: app.fetch,
-};
+if (process.env.NODE_ENV !== "production") {
+  const port = process.env.PORT ? parseInt(process.env.PORT) : 3001;
+  console.log(`Server is running on port ${port}`);
+  serve({
+    fetch: app.fetch,
+    port,
+  });
+}
+
+export default handle(app);
